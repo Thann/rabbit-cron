@@ -1,0 +1,20 @@
+{
+  "url": "amqp://USERNAME:PASSWORD@rabbitmq:5672",
+  "queue": {
+    "name": "tasks",
+    "durable": true
+  },
+  "tasks": [
+    {
+      "name": "dummy-json",
+      "cron": "*/1 * * * *",
+      "task": {
+        "arbitrary": "json"
+      }
+    }, {
+      "name": "dummy-string",
+      "cron": "*/2 * * * *",
+      "task": "arbitrary string"
+    }
+  ]
+}

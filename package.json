@@ -1,0 +1,19 @@
+{
+  "name": "rabbit-cron",
+  "version": "0.0.1",
+  "description": "Send perodic tasks to RabbitMQ",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Thann/rabbit-cron.git"
+  },
+  "main": "cron.js",
+  "license": "Unlicense",
+  "scripts": {
+    "health": "./node_modules/health/health.js -c rabbit-cron"
+  },
+  "dependencies": {
+    "amqplib": "^0.5.3",
+    "cron": "^1.7.1",
+    "health": "github:thann/health.js"
+  }
+}

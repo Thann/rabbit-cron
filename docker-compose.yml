@@ -1,0 +1,24 @@
+version: '3.7'
+
+services:
+  cron:
+    image: thann/rabbit-cron
+    restart: unless-stopped
+    ## Handy for dev
+    #build: .
+    #volumes:
+      #- ./cron.js:/app/cron.js
+      #- ./example_tasks.json:/app/example_tasks.json
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    environment:
+        RABBITMQ_DEFAULT_USER: "USERNAME"
+        RABBITMQ_DEFAULT_PASS: "PASSWORD"
+    # Useful for local testing of rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  ## Add your own worker!
+  #worker:
