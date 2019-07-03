@@ -11,4 +11,5 @@ You can easily make a Dockerfile with your tasks baked-in like this:
 ```
 FROM thann/rabbit-cron
 COPY ./my_tasks.json /app/
+CMD ["./my_tasks.json"]
 ```
