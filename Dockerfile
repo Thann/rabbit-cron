@@ -6,7 +6,7 @@ ENTRYPOINT ["node", "cron"]
 CMD ["./example_tasks.json"]
 HEALTHCHECK CMD npm run health -- 120
 
-RUN apk update --no-cache
+RUN apk upgrade --no-cache
 COPY ./package*.json /app/
 
 FROM base AS build
