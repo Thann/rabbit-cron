@@ -3,7 +3,7 @@ Send periodic tasks to RabbitMQ
 
 `npm install thann/rabbit-cron`
 ```
-cron.js ./example_tasks.json
+rabbit-cron ./example_tasks.json
 ```
 
 ### Dockerfile
