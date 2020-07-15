@@ -16,7 +16,7 @@ Send periodic tasks to RabbitMQ
 	tasks: [
 		{
 			cron: '* * * * *', // cron string
-			task: 'String or JSON message to be enqueued'
+			task: 'String or JSON message to be enqueued',
 			name: 'human readable name', // unused, optional
 			immediate: true, // enqueue on service start
 			... // Message options
@@ -25,11 +25,12 @@ Send periodic tasks to RabbitMQ
 }
 ```
 See the amqp.node docs for info on the options:
-[queue](https://www.squaremobius.net/amqp.node/channel_api.html#channel_assertQueue)
+[queue](https://www.squaremobius.net/amqp.node/channel_api.html#channel_assertQueue),
 [message](https://www.squaremobius.net/amqp.node/channel_api.html#channel_publish)
 
 ## Docker
-Run container with mounted "tasks" file
+Run container with mounted "tasks" file:
+
 `docker run --rm -v "./my_tasks.json:/app/example_tasks.json" thann/rabbit-cron`
 
 ### Dockerfile

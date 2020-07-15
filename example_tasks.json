@@ -16,8 +16,8 @@
       "name": "dummy-string",
       "cron": "*/2 * * * *",
       "priority": 1,
-      "expiration": 160000,
       "immediate": true,
+      "expiration": 160000,
       "task": "arbitrary string"
     }
   ]
