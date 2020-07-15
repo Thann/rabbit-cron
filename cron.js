@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Schedule perodic tasks with RabbitMQ
+// Schedule periodic tasks with RabbitMQ
 
 'use strict';
 const path = require('path');
@@ -15,7 +15,7 @@ if (!process.argv[2]) {
 
 console.log('Initializing Cron Jobs');
 const config = require(path.join(process.cwd(), process.argv[2]));
-console.log(config);
+// console.log(config);
 
 // Connect to RabbitMQ
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -55,11 +55,11 @@ connect();
 function start(channel) {
   const jobs = [];
   for (const task of config.tasks) {
+    const fn = rabbinical(task, channel);
     if (task.cron)
-      jobs.push(new CronJob(task.cron,
-        () => triggerRabbit(task.name, task.task, channel)));
-    else // trigger immediately
-      setTimeout(() => triggerRabbit(task.name, task.task, channel));
+      jobs.push(new CronJob(task.cron, fn));
+    if (!task.cron || task.immediate)
+      setTimeout(fn);
   }
 
   jobs.forEach(job => job.start());
@@ -67,14 +67,25 @@ function start(channel) {
   proveHealth('rabbit-cron');
 }
 
-function triggerRabbit(name, task, channel) {
-  console.log(`Enqueueing: ${name || task}`);
-
-  if (typeof task !== 'string') {
-    task = JSON.stringify(task);
+// turn a task into a function that sends the task to the queue
+function rabbinical(task, channel) {
+  const logMsg = `Enqueueing: ${JSON.stringify(task, undefined, 2)}`;
+  const opts = {};
+  // Pass all other props as options to "sendToQueue"
+  for (const key in task) {
+    if (!(key in ['name', 'cron', 'task', 'immediate']))
+      opts[key] = task[key];
   }
-  channel.sendToQueue(config.queue.name, Buffer.from(task));
+  // turn task into a string then a buffer
+  if (typeof task.task !== 'string') {
+    task.task = JSON.stringify(task.task);
+  }
+  task.task = Buffer.from(task.task);
 
-  // Prove to HEALTHCHECK we're still alive
-  proveHealth('rabbit-cron');
+  return function() {
+    console.log(logMsg);
+    channel.sendToQueue(config.queue.name, task.task, opts);
+    // Prove to HEALTHCHECK we're still alive
+    proveHealth('rabbit-cron');
+  }
 }

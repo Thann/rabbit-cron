@@ -2,7 +2,8 @@
   "url": "amqp://USERNAME:PASSWORD@rabbitmq:5672",
   "queue": {
     "name": "tasks",
-    "durable": true
+    "durable": true,
+    "maxPriority": 2
   },
   "tasks": [
     {
@@ -14,6 +15,9 @@
     }, {
       "name": "dummy-string",
       "cron": "*/2 * * * *",
+      "priority": 1,
+      "expiration": 160000,
+      "immediate": true,
       "task": "arbitrary string"
     }
   ]

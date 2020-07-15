@@ -1,6 +1,6 @@
 {
   "name": "rabbit-cron",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Send perodic tasks to RabbitMQ",
   "repository": {
     "type": "git",
@@ -10,6 +10,7 @@
   "main": "cron.js",
   "license": "Unlicense",
   "scripts": {
+    "build": "docker build -t thann/rabbit-cron .",
     "health": "./node_modules/health/health.js -c rabbit-cron"
   },
   "dependencies": {

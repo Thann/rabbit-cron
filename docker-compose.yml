@@ -4,6 +4,7 @@ services:
   cron:
     image: thann/rabbit-cron
     restart: unless-stopped
+    #command: my_tasks.json
     ## Handy for dev
     #build: .
     #volumes:
