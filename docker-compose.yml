@@ -9,6 +9,7 @@ services:
     #build: .
     #volumes:
       #- ./cron.js:/app/cron.js
+      #- ./task_mutator.js:/app/task_mutator.js
       #- ./example_tasks.json:/app/example_tasks.json
 
   rabbitmq:

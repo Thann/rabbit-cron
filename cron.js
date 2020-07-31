@@ -15,6 +15,7 @@ if (!process.argv[2]) {
 
 console.log('Initializing Cron Jobs');
 const config = require(path.join(process.cwd(), process.argv[2]));
+const logFn = config.log || (t => `Enqueueing: ${JSON.stringify(t, undefined, 2)}`);
 // console.log(config);
 
 // Connect to RabbitMQ
@@ -69,7 +70,7 @@ function start(channel) {
 
 // turn a task into a function that sends the task to the queue
 function rabbinical(task, channel) {
-  const logMsg = `Enqueueing: ${JSON.stringify(task, undefined, 2)}`;
+  const logMsg = logFn(task);
   const opts = {};
   // Pass all other props as options to "sendToQueue"
   for (const key in task) {
