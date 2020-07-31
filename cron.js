@@ -16,6 +16,8 @@ if (!process.argv[2]) {
 console.log('Initializing Cron Jobs');
 const config = require(path.join(process.cwd(), process.argv[2]));
 const logFn = config.log || (t => `Enqueueing: ${JSON.stringify(t, undefined, 2)}`);
+const health = (typeof config.health === 'function')? config.health:
+               () => proveHealth(config.health||'rabbit-cron');
 // console.log(config);
 
 // Connect to RabbitMQ
@@ -65,7 +67,8 @@ function start(channel) {
 
   jobs.forEach(job => job.start());
   console.log(`Cron Jobs Started: ${jobs.length}`);
-  proveHealth('rabbit-cron');
+  try { health(); }
+  catch(e) { console.error("Health Error:", e); }
 }
 
 // turn a task into a function that sends the task to the queue
@@ -87,6 +90,7 @@ function rabbinical(task, channel) {
     console.log(logMsg);
     channel.sendToQueue(config.queue.name, task.task, opts);
     // Prove to HEALTHCHECK we're still alive
-    proveHealth('rabbit-cron');
+    try { health(); }
+    catch(e) { console.error("Health Error:", e); }
   }
 }
